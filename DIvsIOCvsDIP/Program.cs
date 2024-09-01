@@ -1,5 +1,27 @@
-﻿var stars = new GitHubServiceDI().GetStars("throw");
+﻿using Microsoft.Extensions.DependencyInjection;
 
+var serviceCollection = new ServiceCollection();
+
+
+serviceCollection.AddTransient<IGithubClient, GithubClient>();
+serviceCollection.AddTransient<GitHubServiceDI>();
+
+var serviceProvider = serviceCollection.BuildServiceProvider();
+
+var gitHubService = serviceProvider.GetRequiredService<GitHubServiceDI>();
+
+var result = gitHubService.GetStars("throw");
+Console.WriteLine("throw has this many stars with service provider " +
+    result);
+
+
+// Classic using
+var client = new GithubClient();
+
+var stars = new GitHubServiceDI(client).GetStars("throw");
+
+Console.WriteLine("throw has this many stars with classic way " +
+    stars);
 
 
 #region DIP vs DI vs IOC classes
@@ -34,7 +56,7 @@ internal class GitHubServiceSetter
 internal class GitHubServiceInterface : IGithubClientSetter
 {
     private IGithubClient _gitHubClient;
-
+    //interface injection
     public void SetGithubClient(IGithubClient gitHubClient)
     {
         _gitHubClient = gitHubClient;
