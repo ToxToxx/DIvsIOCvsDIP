@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
+#region IOC realization
 var serviceCollection = new ServiceCollection();
 
 
@@ -14,7 +15,9 @@ var result = gitHubService.GetStars("throw");
 Console.WriteLine("throw has this many stars with service provider " +
     result);
 
+#endregion
 
+#region Classic DI realization
 // Classic using
 var client = new GithubClient();
 
@@ -23,8 +26,9 @@ var stars = new GitHubServiceDI(client).GetStars("throw");
 Console.WriteLine("throw has this many stars with classic way " +
     stars);
 
+#endregion
 
-#region DIP vs DI vs IOC classes
+#region Different types of injection
 //DI - the bigger object don't rely on concrete smaller object - they use abstraction
 //IOC - giving some control over application or part to framework or container
 //
